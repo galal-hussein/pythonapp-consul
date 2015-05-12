@@ -4,7 +4,7 @@ from flask.ext.script import Manager, Server
 import consul
 import socket
 import os
-
+import netifaces as nic
 
 SECRET_KEY = "KeepThisS3cr3t"
 SITE_WIDTH = 800
@@ -24,9 +24,10 @@ manager.add_command("runserver", Server(
 )
 
 def register():
+    ip = nic.ifaddresses('wlan0')[2][0]['addr']
     c = consul.Consul(host=os.getenv("CONSUL_IP"), port=int(os.getenv("CONSUL_PORT")))
     s = c.agent.service
-    s.register("Python_app", service_id=socket.gethostname(), port=5000, http="http://google.com", interval="10s", tags=['python'])
+    s.register("Python_app", service_id=socket.gethostname(), port=5000, http="http://"+ip+":5000", interval="10s", tags=['python'])
 
 @app.route('/')
 def cntr():
