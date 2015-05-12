@@ -27,7 +27,7 @@ def register():
     ip = nic.ifaddresses('wlan0')[2][0]['addr']
     c = consul.Consul(host=os.getenv("CONSUL_IP"), port=int(os.getenv("CONSUL_PORT")))
     s = c.agent.service
-    s.register("Python_app", service_id=socket.gethostname(), port=5000, http="http://"+ip+":5000", interval="10s", tags=['python'])
+    s.register("Python_app", service_id=socket.gethostname(), port=5000, http="http://"+ip+":5000/healthcheck", interval="10s", tags=['python'])
 
 @app.route('/')
 def cntr():
