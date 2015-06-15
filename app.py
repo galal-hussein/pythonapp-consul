@@ -38,5 +38,4 @@ def healthcheck():
     return "200 OK From "+socket.gethostname()
 
 if __name__ == '__main__':
-    register()
     manager.run()
